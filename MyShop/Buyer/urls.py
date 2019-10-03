@@ -12,4 +12,9 @@ urlpatterns = [
     re_path('detail/(?P<id>\d+)/',detail),
     path("add_cart/", add_cart),
     path("cart/", cart),
+    path("pay_order/", pay_order),
+    path("pay_order_more/", pay_order_more),
+    path("alipay/", AlipayViews),
+    path("pay_result/", pay_result),
+
 ]
