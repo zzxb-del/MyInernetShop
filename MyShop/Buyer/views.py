@@ -33,7 +33,8 @@ def register(request):
         return HttpResponseRedirect("/Buyer/login/")
     return render(request,"buyer/register.html",locals())
 
-
+from django.views.decorators.cache import cache_page
+@cache_page(60*15) #使用缓存，缓存的寿命15分钟
 def login(request):
     error_message = ""
     if request.method == 'POST':

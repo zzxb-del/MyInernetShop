@@ -8,4 +8,5 @@ urlpatterns = [
     path("login/",login),
     path("logout/",logout),
     path("index/",index),
+    path('slc/', send_login_code),
 ]
