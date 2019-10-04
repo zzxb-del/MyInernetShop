@@ -1,10 +1,9 @@
-
 from django.shortcuts import render,HttpResponseRedirect,HttpResponse
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from Seller.models import *
+from Buyer.models import *
 import hashlib
-
 
 
 def setPassword(password):
@@ -226,6 +225,26 @@ def goods_status(request,state,id):
         goods.goods_status = 0
     goods.save()
     url = request.META.get("HTTP_REFERER","/goods_list/1/1")
+    return HttpResponseRedirect(url)
+
+def order_list(request,status):
+    """status 订单状态
+    0 未支付 1已支付 2待收货 3/4 完成/拒收"""
+    status = int(status)
+    user_id = request.COOKIES.get("id")  #获取店铺id
+    store = Login_User.objects.get(id = user_id) #获取店铺信息
+    store_order = store.orderinfo_set.filter(order_status = status).order_by("-id")
+    return render(request,"seller/order_list.html",locals())
+
+def change_order(request):
+    #通过订单详情id锁定订单详情
+    order_id = request.GET.get("order_id")
+    #获取要修改的状态
+    order_status = request.GET.get("order_status")
+    order = OrderInfo.objects.get(id = order_id)
+    order.order_status = int(order_status)
+    order.save()
+    url = request.META.get("HTTP_REFERER", "/order_list/1/1")
     return HttpResponseRedirect(url)
 
 # Create your views here.

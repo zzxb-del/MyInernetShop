@@ -16,5 +16,7 @@ urlpatterns = [
     path("pay_order_more/", pay_order_more),
     path("alipay/", AlipayViews),
     path("pay_result/", pay_result),
+    path("user_center_info/", user_center_info),
+    path("user_center_order/", user_center_order),
 
 ]

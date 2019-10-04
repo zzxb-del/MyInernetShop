@@ -243,5 +243,16 @@ def pay_result(request):
         order.orderinfo_set.all().update(order_status = 1)
     return render(request,"buyer/pay_result.html",locals())
 
+@loginValid
+def user_center_info(request):
+    return render(request,"buyer/user_center_info.html",locals())
+
+@loginValid
+def user_center_order(request):
+    user_id = request.COOKIES.get("id")
+    user = Login_User.objects.get(id = int(user_id))
+    order_list = user.payorder_set.order_by("-order_data")
+    return render(request,"buyer/user_center_order.html",locals())
+
 
 # Create your views here.
