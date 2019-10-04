@@ -1,0 +1,94 @@
+{% extends "buyer/base.html" %}
+
+{% block title %}
+    商品列表页
+{% endblock %}
+
+{% block content %}
+
+    <div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+		<a href="#">新鲜水果</a>
+	</div>
+ {% if goods_list %}
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+
+                    {% for  i in  recommend%}
+					<li>
+						<a href="#"><img src="/static/{{ i.picture }}"></a>
+						<h4><a href="#">{{ i.goods_name }}</a></h4>
+						<div class="prize">{{ i.goods_price }}</div>
+					</li>
+                    {% endfor %}
+
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+				<a href="#" class="active">默认</a>
+				<a href="#">价格</a>
+				<a href="#">人气</a>
+			</div>
+
+			<ul class="goods_type_list clearfix">
+
+                {% for j in goods_list %}
+                    <li>
+					<a href="/Buyer/detail/{{ j.id }}"><img src="/static/{{ j.picture }}"></a>
+					<h4><a href="/Buyer/detail/{{ j.id }}">{{ j.goods_name }}</a></h4>
+					<div class="operate">
+						<span class="prize">￥{{ j.goods_price }}</span>
+						<a id="{{ j.id }}" href="#" class="add_goods" title="加入购物车" onclick="add_cart(this)"></a>
+					</div>
+				</li>
+                {% endfor %}
+
+			</ul>
+
+			<div class="pagenation">
+				<a href="#"><上一页></上一页></a>
+				<a href="#" class="active">1</a>
+				<a href="#">2</a>
+				<a href="#">3</a>
+				<a href="#">4</a>
+				<a href="#">5</a>
+				<a href="#">下一页></a>
+			</div>
+		</div>
+    {% else %}
+     <p style="text-align: center">抱歉，小店没有您要的商品,你可以尝试找一下<a href="/Buyer/goods_list/?type=k&keywords=肉">肉</a></p>
+    {% endif %}
+	</div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        function add_cart(obj) {
+            var goods_id = obj.id;
+            var csrf_token = "{{ csrf_token }}";
+            var sendDate = {
+                "goods_id":goods_id,
+                "csrfmiddlewaretoken":csrf_token
+            };
+            $.ajax({
+                url:"/Buyer/add_cart/",
+                type:"POST",
+                data:sendDate,
+                success:function (data) {
+                    alert(data["data"])
+                },
+                error:function (error) {
+                    console.log(error)
+                }
+            })
+        }
+    </script>
+{% endblock %}
